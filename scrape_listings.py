@@ -1,10 +1,11 @@
 import time
-from bs4 import BeautifulSoup
 import requests
+from bs4 import BeautifulSoup
 from helper_functions import filter_strings_with_keyword, find_sentences_with_keyword
+from write_to_excel import write_to_excel
 
 
-def scrapeArrayOfListings(links):
+def scrapeArrayOfListings(links, keyword):
     scraped_info = []
 
     # Required when sending request to avoid getting denied
@@ -39,41 +40,38 @@ def scrapeArrayOfListings(links):
         if len(descriptions) > 2:
             print("method 1")
 
-            array_of_strings = [description.get_text() for description in descriptions]
+            array_of_strings = [
+                description.get_text(separator=" ", strip=True)
+                for description in descriptions
+            ]
 
-            # print("array of strings", array_of_strings)
+            keyword_snippets = filter_strings_with_keyword(array_of_strings, keyword)
 
-            keyword_snippets = filter_strings_with_keyword(
-                array_of_strings, "salesforce"
-            )
+            print("array of strings", keyword_snippets)
+            print("\n")
 
         else:
             print("method 2")
             concatenated_strings = " ".join(
                 [description.get_text(" ", strip=True) for description in descriptions]
             )
-            # print("concat strings", concatenated_strings)
 
             keyword_snippets = find_sentences_with_keyword(
-                concatenated_strings, "salesforce"
+                concatenated_strings, keyword
             )
 
-        # for description in descriptions:
-        #     print("Description get text:", description.get_text(" ", strip=True))
-        #     pass
+            print("concat strings", keyword_snippets)
 
-        # print([title, company_name, url])
-        # print("Title:", title.get_text() if title else "No title real sorry about it.")
-        # print("company name", company_name.get_text())
-        # print("keyword snippets", keyword_snippets)
-        # print("url", url)
+        keyword_snippets = ", ".join(keyword_snippets)
 
-        # print("\n")
-        # print("\n")
-        # print("\n")
+        current_page_information = [
+            title.get_text(),
+            company_name.get_text(),
+            url,
+            keyword_snippets,
+        ]
 
-        if max >= 200:
-            break
+        write_to_excel("glassdoor_info.xlsx", current_page_information)
 
         scraped_info.append(
             {
@@ -84,8 +82,14 @@ def scrapeArrayOfListings(links):
             }
         )
 
-        print(f"Finished with scrape #{idx}")
+        print(f"Finished with scrape #{idx+1}")
 
         time.sleep(1)
 
     return scraped_info
+
+
+def scrape_pages(list_of_pages):
+    scraped_info = []
+    for page in list_of_pages[:4]:
+        scraped_info.append(scrapeArrayOfListings(page))

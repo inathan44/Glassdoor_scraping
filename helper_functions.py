@@ -1,3 +1,6 @@
+import random
+
+
 def find_sentences_with_keyword(paragraph, keyword):
     paragraph_lower = paragraph.lower()
     sentences = paragraph_lower.split(". ")
@@ -15,3 +18,22 @@ def filter_strings_with_keyword(strings, keyword):
         if keyword.lower() in string.lower():
             matching_strings.append(string)
     return matching_strings
+
+
+def get_list_of_proxies():
+    with open("valid_proxies.txt", "r") as f:
+        proxies = f.read().split("\n")
+
+    return proxies
+
+
+def get_random_proxy(proxy_list):
+    proxy = random.choice(proxy_list)
+    return proxy
+
+
+def format_proxies(proxy):
+    proxies = {}
+    proxies["http"] = f"http://{proxy}"
+    proxies["https"] = f"https://{proxy}"
+    return proxies
