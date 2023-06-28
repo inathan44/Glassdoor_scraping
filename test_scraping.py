@@ -1,6 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 import time
+from search_script import findJobsUrlByKeyword
+from scrape_listings import scrapeArrayOfListings
 
 # Required when sending request to avoid getting denied
 headers = {
@@ -8,7 +10,8 @@ headers = {
 }
 
 # Send a GET request to the website
-url = "https://www.glassdoor.com/Job/salesforce-jobs-SRCH_KO0,10.htm"
+url = findJobsUrlByKeyword("salesforce")
+# url = "https://www.glassdoor.com/Job/salesforce-jobs-SRCH_KO0,10.htm"
 response = requests.get(url, headers=headers)
 
 # Create a BeautifulSoup object to parse the HTML content
@@ -17,47 +20,5 @@ soup = BeautifulSoup(response.content, "html.parser")
 # Pulls all links from the search results page
 links = soup.find_all("a", {"class": "jobCard"})
 
-max = 0
 
-for link in links:
-    job_link = link.get("href")
-    max += 1
-
-    # run another search on each job listing found on the page
-    url = "https://www.glassdoor.com" + job_link
-    response = requests.get(url, headers=headers)
-
-    print("URL <><><><><><><><><><>", url)
-
-    # Create a BeautifulSoup object to parse the HTML content
-    soup = BeautifulSoup(response.content, "html.parser")
-
-    print("status code:", response.status_code)
-
-    descriptions = soup.find(attrs={"class": "desc"})
-    title = soup.find(attrs={"data-test": "job-title"})
-
-    print("title", title.get_text() if title else "No Title soprry")
-
-    text_list = [text for text in descriptions.stripped_strings]
-
-    text_list_words_only = " ".join(text_list)
-
-    # print("text list words only", text_list_words_only.split(" "))
-
-    # print("Text list from stripped string:", repr(text_list))
-    print("\n")
-
-    # all_descriptions = soup.find_all(attrs={"class": "desc"})
-
-    # for description in descriptions:
-    #     print("Description get text:", description.get_text(" ", strip=True))
-
-    print("\n")
-    print("\n")
-    print("\n")
-    print("\n")
-
-    if max >= 5:
-        break
-    time.sleep(3)
+print(len(scrapeArrayOfListings(links)))
