@@ -8,16 +8,16 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 
-from helper_functions import get_list_of_proxies, get_random_proxy
+# from helper_functions import get_list_of_proxies, get_random_proxy
 
-list_of_proxies = get_list_of_proxies()
+# list_of_proxies = get_list_of_proxies()
 
-random_proxy = get_random_proxy(list_of_proxies)
+# random_proxy = get_random_proxy(list_of_proxies)
 
 
 def findPageUrlsByKeyword(keyword, proxy_address=None):
-    if proxy_address:
-        print("proxy:", random_proxy)
+    # if proxy_address:
+    #     print("proxy:", random_proxy)
 
     # Enable logging
     logging.basicConfig(level=logging.INFO)
@@ -64,7 +64,7 @@ def findPageUrlsByKeyword(keyword, proxy_address=None):
         # Extract URLs from subsequent pages until the "Next" button is disabled
         idx = 0
         # while True:
-        for i in range(2):
+        for i in range(1):
             print(f"page {idx+1}")
 
             # Delay to allow the page to load
