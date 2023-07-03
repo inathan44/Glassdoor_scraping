@@ -27,26 +27,8 @@ def filter_strings_with_keyword(strings, keyword):
     matching_strings = " ".join(matching_strings)
     matching_strings = find_sentences_with_keyword(matching_strings, keyword)
 
-    return " ".join(matching_strings)
-
-
-# def get_list_of_proxies():
-#     with open("valid_proxies.txt", "r") as f:
-#         proxies = f.read().split("\n")
-
-#     return proxies
-
-
-# def get_random_proxy(proxy_list):
-#     proxy = random.choice(proxy_list)
-#     return proxy
-
-
-# def format_proxies(proxy):
-#     proxies = {}
-#     proxies["http"] = f"http://{proxy}"
-#     proxies["https"] = f"https://{proxy}"
-#     return proxies
+    return matching_strings
+    # return " ".join(matching_strings)
 
 
 def format_into_search_term(list_of_keywords):
@@ -81,7 +63,7 @@ def request_through_proxy(url_to_search):
 
 def format_into_bullets(array_of_strings):
     formatted_strings = [
-        "-" + s for s in array_of_strings
+        "--" + s for s in array_of_strings
     ]  # Prepend "-" to each string
     joined_strings = "\n\n".join(formatted_strings)  # Join strings with line break
     return joined_strings
