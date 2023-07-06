@@ -1,7 +1,18 @@
 from openpyxl import Workbook, load_workbook
 
 
-def write_to_excel(file_name, data):
+def write_to_excel(
+    file_name,
+    company,
+    title,
+    url,
+    size,
+    industry,
+    revenue,
+    age,
+    keyword_snippets,
+    sheet_name,
+):
     try:
         # Load existing workbook if it exists, or create a new one
         try:
@@ -9,15 +20,34 @@ def write_to_excel(file_name, data):
         except FileNotFoundError:
             workbook = Workbook()
 
-        # Select the active sheet
-        sheet = workbook.active
+        if sheet_name in workbook.sheetnames:  # Find or create sheet
+            sheet = workbook[sheet_name]
+        else:
+            sheet = workbook.create_sheet(sheet_name)
 
         # Add column headers if not already present
         if sheet.max_row == 1:
-            column_headers = ("company", "title", "url", "keyword_snippets")
+            column_headers = [
+                "company",
+                "title",
+                "url",
+                "size",
+                "industry",
+                "revenue",
+                "age",
+            ]
+
+            # Add a column for each keyword
+            for keyword in keyword_snippets.keys():
+                column_headers.append(f"keyword: {keyword}")
+
             sheet.append(column_headers)
 
         # Append data to the end of the columns
+        data = [company, title, url, size, industry, revenue, age]
+        for keyword in keyword_snippets.keys():
+            data.append(keyword_snippets[keyword])
+
         sheet.append(data)
 
         # Save the workbook
