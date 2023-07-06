@@ -63,7 +63,7 @@ def request_through_proxy(url_to_search):
 
 def format_into_bullets(array_of_strings):
     formatted_strings = [
-        "--" + s for s in array_of_strings
+        "- " + s for s in array_of_strings
     ]  # Prepend "-" to each string
-    joined_strings = "\n\n".join(formatted_strings)  # Join strings with line break
+    joined_strings = "\n".join(formatted_strings)  # Join strings with line break
     return joined_strings
