@@ -1,1 +1,7 @@
 .env
+*.pyc
+__pycache__/
+valid_proxies.txt
+testing.py
+glassdoor_scraping_notes.txt
+*.xlsx
