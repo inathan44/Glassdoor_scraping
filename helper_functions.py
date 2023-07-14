@@ -13,7 +13,6 @@ def find_sentences_with_keyword(paragraph, keyword):
     matching_sentences = []
     for sentence in sentences:
         if keyword.lower() in sentence:
-            # original_sentence = paragraph.split(". ")[sentences.index(sentence)].strip()
             matching_sentences.append(sentence)
     return matching_sentences
 
@@ -23,16 +22,16 @@ def filter_strings_with_keyword(strings, keyword):
     for string in strings:
         if keyword.lower() in string.lower():
             matching_strings.append(string)
-    # matching_strings = matching_strings.join(" ")
     matching_strings = " ".join(matching_strings)
     matching_strings = find_sentences_with_keyword(matching_strings, keyword)
 
     return matching_strings
-    # return " ".join(matching_strings)
 
 
 def format_into_search_term(list_of_keywords):
-    formatted_keywords = " ".join([f'"{keyword}"' for keyword in list_of_keywords])
+    # formatted_keywords = " ".join([f'"{keyword}"' for keyword in list_of_keywords])
+    # temporarily only search first keyword
+    formatted_keywords = " ".join([f'"{keyword}"' for keyword in list_of_keywords[0]])
     return formatted_keywords
 
 
