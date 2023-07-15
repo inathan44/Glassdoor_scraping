@@ -23,7 +23,7 @@ from bs4 import BeautifulSoup
 
 from scrape_page_of_listings import scrape_listings
 
-KEYWORDS = ["netsuite"]
+KEYWORDS = ["twilio"]
 URL = "https://www.glassdoor.com/Job/"
 
 # Set up and open chrome driver
@@ -38,7 +38,7 @@ headers_list = get_headers_list()
 random_headers = get_random_header(headers_list)
 
 # Commenting out headless mode for troubleshooting
-chrome_options.add_argument("--headless=new")
+# chrome_options.add_argument("--headless=new")
 
 # Put random headers for request
 for header, value in random_headers.items():
