@@ -31,7 +31,7 @@ def filter_strings_with_keyword(strings, keyword):
 def format_into_search_term(list_of_keywords):
     # formatted_keywords = " ".join([f'"{keyword}"' for keyword in list_of_keywords])
     # temporarily only search first keyword
-    formatted_keywords = " ".join([f'"{keyword}"' for keyword in list_of_keywords[0]])
+    formatted_keywords = " ".join([f'"{keyword}"' for keyword in list_of_keywords[0:1]])
     return formatted_keywords
 
 
