@@ -1,4 +1,5 @@
 from openpyxl import Workbook, load_workbook
+from datetime import datetime
 
 
 def write_to_excel(
@@ -19,6 +20,11 @@ def write_to_excel(
             workbook = load_workbook(file_name)
         except FileNotFoundError:
             workbook = Workbook()
+
+        date_value = datetime.now()
+        formatted_date = date_value.strftime("%m-%d")
+
+        sheet_name = sheet_name + "_" + formatted_date
 
         if sheet_name in workbook.sheetnames:  # Find or create sheet
             sheet = workbook[sheet_name]
