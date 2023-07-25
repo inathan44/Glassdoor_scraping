@@ -1,10 +1,6 @@
 from helper_functions import (
     get_headers_list,
     get_random_header,
-    filter_strings_with_keyword,
-    find_sentences_with_keyword,
-    format_into_bullets,
-    format_into_search_term,
 )
 
 from paginate import next_page_found, go_to_next_page
@@ -23,7 +19,14 @@ from bs4 import BeautifulSoup
 
 from scrape_page_of_listings import scrape_listings
 
-KEYWORDS = ["kustomer"]
+KEYWORDS = [
+    "intacct",
+    "credit card",
+    "reconciliation",
+    "cash application",
+    "collections",
+    "accounts receivable",
+]
 URL = "https://www.glassdoor.com/Job/"
 
 # Set up and open chrome driver
