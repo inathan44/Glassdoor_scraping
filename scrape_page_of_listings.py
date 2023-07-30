@@ -42,9 +42,9 @@ def scrape_listings(keywords, driver):
         # Click on each <a> tag with a delay of one second
         for idx, link in enumerate(job_card_links):
             # Placeholder variable definitions
-            revenue = None
-            industry = None
-            size = None
+            revenue = "N/A"
+            industry = "N/A"
+            size = "N/A"
 
             if idx > max:
                 break
@@ -66,7 +66,7 @@ def scrape_listings(keywords, driver):
             while retry_count < max_retries:
                 try:
                     link.click()
-                    time.sleep(3)
+                    time.sleep(2)
                     html_source = driver.page_source
                     soup = BeautifulSoup(html_source, "html.parser")
                     break  # Exit the loop if the operation is successful
@@ -155,7 +155,8 @@ def scrape_listings(keywords, driver):
 
                 write_to_excel(
                     file_name="excel_testing.xlsx",
-                    sheet_name=" + ".join(keywords),
+                    # sheet_name=" + ".join(keywords),
+                    sheet_name=keywords[0],
                     company=company_name,
                     title=job_title,
                     url=url,
