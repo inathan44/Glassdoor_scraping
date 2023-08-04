@@ -20,7 +20,7 @@ from bs4 import BeautifulSoup
 from scrape_page_of_listings import scrape_listings
 
 KEYWORDS = [
-    "intacct",
+    "netsuite implementation",
     "credit card",
     "reconciliation",
     "cash application",
