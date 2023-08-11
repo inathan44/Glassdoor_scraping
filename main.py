@@ -19,14 +19,7 @@ from bs4 import BeautifulSoup
 
 from scrape_page_of_listings import scrape_listings
 
-KEYWORDS = [
-    "netsuite implementation",
-    "credit card",
-    "reconciliation",
-    "cash application",
-    "collections",
-    "accounts receivable",
-]
+KEYWORDS = ["viewpoint"]
 URL = "https://www.glassdoor.com/Job/"
 
 # Set up and open chrome driver
