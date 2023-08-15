@@ -5,6 +5,7 @@ valid_proxies.txt
 testing.py
 glassdoor_scraping_notes.txt
 *.xlsx
+*.xlsm
 main_old.py
 pagination_script.py
 scrape_page_of_listings.py
