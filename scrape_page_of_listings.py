@@ -5,10 +5,6 @@ from helper_functions import (
 )
 
 
-import logging
-
-from selenium import webdriver
-
 # from seleniumwire import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.service import Service
@@ -21,9 +17,6 @@ import time
 from bs4 import BeautifulSoup
 
 from write_to_excel import write_to_excel
-
-
-KEYWORDS = [""]
 
 
 def scrape_listings(keywords, driver):
@@ -154,7 +147,6 @@ def scrape_listings(keywords, driver):
                     file_name="excel_testing.xlsx",
                     # sheet_name=" + ".join(keywords),
                     sheet_name=keywords[0],
-                    # sheet_name="SMC + DM",
                     company=company_name,
                     title=job_title,
                     url=url,
@@ -171,7 +163,7 @@ def scrape_listings(keywords, driver):
     except Exception as e:
         modal = driver.find_element(By.CLASS_NAME, "actionBarMt0")
         if modal.is_displayed():
-            print("modal likely caused the error probably")
+            print("modal likely caused the error")
         print("An exception occurred:", repr(e))
 
     finally:
