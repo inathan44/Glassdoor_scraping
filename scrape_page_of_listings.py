@@ -1,10 +1,7 @@
 from helper_functions import (
-    get_headers_list,
-    get_random_header,
     filter_strings_with_keyword,
     find_sentences_with_keyword,
     format_into_bullets,
-    format_into_search_term,
 )
 
 
@@ -157,6 +154,7 @@ def scrape_listings(keywords, driver):
                     file_name="excel_testing.xlsx",
                     # sheet_name=" + ".join(keywords),
                     sheet_name=keywords[0],
+                    # sheet_name="SMC + DM",
                     company=company_name,
                     title=job_title,
                     url=url,
