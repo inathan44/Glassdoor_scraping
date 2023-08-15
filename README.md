@@ -1,6 +1,6 @@
-# Job Search Automation with Python
+# Job data Automation with Python
 
-This project is a Python script that automates the job search process using Selenium, BeautifulSoup, and openpyxl. It allows you to search for job postings on Glassdoor that match your specified keywords and store the results in a CSV and Excel file. Data can be used for sales prospecting, data analysis, or whatever your project needs the data for!
+This Python script  automates the job search process using Selenium, BeautifulSoup, and openpyxl. It allows you to search for job postings on Glassdoor that match your specified keywords and store the results in a CSV and Excel file. Data can be used for sales prospecting, data analysis, or whatever your project needs the data for!
 
 ## Getting Started
 
