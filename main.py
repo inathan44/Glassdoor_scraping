@@ -19,7 +19,15 @@ from bs4 import BeautifulSoup
 
 from scrape_page_of_listings import scrape_listings
 
-KEYWORDS = ["intacct"]
+KEYWORDS = [
+    "salesloft",
+    "bdr",
+    "business development representative",
+    "sdr",
+    "sales development representative",
+]
+
+
 URL = "https://www.glassdoor.com/Job/"
 
 # Set up and open chrome driver
@@ -29,6 +37,7 @@ logging.basicConfig(level=logging.INFO)
 
 # Set up Chrome driver options
 chrome_options = Options()
+service = Service()
 
 headers_list = get_headers_list()
 random_headers = get_random_header(headers_list)
@@ -50,7 +59,7 @@ chrome_options.add_argument("--disable-blink-features=AutomationControlled")
 webdriver_path = "/path/to/chromedriver"
 
 # Instantiate Chrome driver
-driver = webdriver.Chrome(options=chrome_options)
+driver = webdriver.Chrome(options=chrome_options, service=service)
 
 
 try:
