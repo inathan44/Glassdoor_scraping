@@ -19,7 +19,7 @@ from bs4 import BeautifulSoup
 
 from scrape_page_of_listings import scrape_listings
 
-KEYWORDS = ["fleetio"]
+KEYWORDS = ["onboarding"]
 
 
 URL = "https://www.glassdoor.com/Job/"
