@@ -35,6 +35,7 @@ def scrape_listings(keywords, driver):
             revenue = "N/A"
             industry = "N/A"
             size = "N/A"
+            company_website = "N/A"
 
             if idx > max:
                 break
@@ -144,7 +145,7 @@ def scrape_listings(keywords, driver):
                 print("revenue:", revenue)
 
                 write_to_excel(
-                    file_name="excel_testing.xlsx",
+                    file_name="scrape_data.xlsx",
                     # sheet_name=" + ".join(keywords),
                     sheet_name=keywords[0],
                     company=company_name,
@@ -155,6 +156,7 @@ def scrape_listings(keywords, driver):
                     revenue=revenue,
                     age=job_age,
                     keyword_snippets=keyword_snippets,
+                    company_website=company_website,
                 )
 
             except Exception as e:
