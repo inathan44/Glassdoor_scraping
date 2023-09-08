@@ -13,6 +13,7 @@ def write_to_excel(
     age,
     keyword_snippets,
     sheet_name,
+    company_website,
 ):
     try:
         # Load existing workbook if it exists, or create a new one
@@ -41,6 +42,7 @@ def write_to_excel(
                 "industry",
                 "revenue",
                 "age",
+                "company_website",
             ]
 
             # Add a column for each keyword
@@ -50,7 +52,7 @@ def write_to_excel(
             sheet.append(column_headers)
 
         # Append data to the end of the columns
-        data = [company, title, url, size, industry, revenue, age]
+        data = [company, title, url, size, industry, revenue, age, company_website]
         for keyword in keyword_snippets.keys():
             data.append(keyword_snippets[keyword])
 
