@@ -37,7 +37,7 @@ headers_list = get_headers_list()
 random_headers = get_random_header(headers_list)
 
 # Comment out headless mode for troubleshooting
-chrome_options.add_argument("--headless=new")
+# chrome_options.add_argument("--headless=new")
 
 # Put random headers for request
 for header, value in random_headers.items():
@@ -47,7 +47,15 @@ chrome_options.add_argument("--disable-gpu")
 chrome_options.add_argument("--window-size=1080,720")
 chrome_options.add_argument("--no-sandbox")
 chrome_options.add_argument("--disable-blink-features=AutomationControlled")
-# chrome_options.add_argument(f"--proxy-server={proxy}")
+
+
+# proxy = "https://{username}:{password}.smartproxy.com:{port}"
+# proxy = "https://sp396873i9:aa19mgJjHkOLero65n@us.smartproxy.com:10000"
+proxy = "https://us.smartproxy.com:10000"
+
+# Add the proxy configuration to the WebDriver options
+chrome_options.add_argument(f"--proxy-server={proxy}")
+
 
 # Set path to your Chrome driver executable
 webdriver_path = "/path/to/chromedriver"
