@@ -49,8 +49,6 @@ chrome_options.add_argument("--no-sandbox")
 chrome_options.add_argument("--disable-blink-features=AutomationControlled")
 
 
-# proxy = "https://{username}:{password}.smartproxy.com:{port}"
-# proxy = "https://sp396873i9:aa19mgJjHkOLero65n@us.smartproxy.com:10000"
 proxy = "https://us.smartproxy.com:10000"
 
 # Add the proxy configuration to the WebDriver options
