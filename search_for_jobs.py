@@ -27,7 +27,7 @@ from urllib.parse import urljoin
 def search_jobs_by_keywords(url, keywords, driver):
     try:
         # Open Glassdoor website
-        driver.get("https://www.glassdoor.com/Job/")
+        driver.get(url)
 
         # Find and interact with the search input field
         search_input = WebDriverWait(driver, 30).until(
@@ -40,9 +40,10 @@ def search_jobs_by_keywords(url, keywords, driver):
         search_input.send_keys(Keys.RETURN)
 
         # Wait for the search results to load
-        WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.ID, "filter_jobType"))
-        )
+        time.sleep(3)
+        # WebDriverWait(driver, 10).until(
+        #     EC.presence_of_element_located((By.ID, "filter_jobType"))
+        # )
 
         current_url = driver.current_url
 
@@ -52,27 +53,10 @@ def search_jobs_by_keywords(url, keywords, driver):
         driver.get(new_url)
 
         # Wait for the search results to load
-        WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.ID, "filter_jobType"))
-        )
-
-        # # Find and click on the div with attribute "data-test" and value "sort-by-header"
-        # div_element = driver.find_element(
-        #     By.CSS_SELECTOR, "div[data-test='sort-by-header']"
+        time.sleep(3)
+        # WebDriverWait(driver, 10).until(
+        #     EC.presence_of_element_located((By.ID, "filter_jobType"))
         # )
-        # div_element.click()
-
-        # # Wait for the sorting options to appear
-        # time.sleep(2)
-
-        # # Find and click on the button with attribute "data-test" and value "date_desc"
-        # button_element = driver.find_element(
-        #     By.CSS_SELECTOR, "button[data-test='date_desc']"
-        # )
-        # button_element.click()
-
-        # # Wait for the page to reload with the new sorting applied
-        # time.sleep(5)
 
     except Exception as e:
-        print("error when searching:", repr(e))
+        print("error when searching for jobs:", repr(e))

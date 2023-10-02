@@ -59,3 +59,60 @@ def next_page_found(driver):
     except Exception as e:
         print("error:", repr(e))
         # return False
+
+
+def click_show_more(driver):
+    time.sleep(2)
+    # Check if the modal is present and close it
+    try:
+        modal = driver.find_element(By.CLASS_NAME, "actionBarMt0")
+        if modal.is_displayed():
+            modal_close_button = modal.find_element(By.TAG_NAME, "button")
+            modal_close_button.click()
+
+            time.sleep(1)  # Give some time for the modal to close
+    except:
+        pass
+
+    # Click on the "Show more jobs" button
+    try:
+        show_more_button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable(
+                (By.CSS_SELECTOR, "div[class^='JobsList_buttonWrapper'] button")
+            )
+        )
+        show_more_button.click()
+    except Exception as e:
+        print(
+            "modal found when trying to click the button"
+            if modal.is_displayed
+            else "no modal found when trying to click the Show More button"
+        )
+        print("Error trying to click the Show More button", repr(e))
+
+
+def show_more_button_found(driver):
+    time.sleep(4)
+    try:
+        modal = driver.find_element(By.CLASS_NAME, "actionBarMt0")
+
+        if modal.is_displayed():
+            modal_close_button = modal.find_element(By.TAG_NAME, "button")
+            modal_close_button.click()
+
+    except Exception as e:
+        print("modal not found")
+
+    try:
+        show_more_button = driver.find_elements(
+            By.CSS_SELECTOR, "div[class^='JobsList_buttonWrapper'] button"
+        )
+
+        if show_more_button:
+            return True
+        else:
+            return False
+
+    except Exception as e:
+        print("error finding show more button:", repr(e))
+        # return False

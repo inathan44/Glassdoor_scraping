@@ -2,6 +2,7 @@ from helper_functions import (
     filter_strings_with_keyword,
     find_sentences_with_keyword,
     format_into_bullets,
+    extract_context_sentence,
 )
 
 
@@ -25,20 +26,29 @@ def scrape_listings(keywords, driver):
     try:
         # Find all <a> tags with class "jobCard"
         time.sleep(5)
-        job_card_links = driver.find_elements(By.CSS_SELECTOR, "a.jobCard")
+        # job_card_links = driver.find_elements(By.CSS_SELECTOR, "a.jobCard")
+        job_card_links = driver.find_elements(By.CSS_SELECTOR, ".jobCard")
+
         print("length of cards on page", len(job_card_links))
+
+        if len(job_card_links) % 20 == 0:
+            print("divisible by 20")
+            most_recent_listings = 20
+        else:
+            most_recent_listings = len(job_card_links) % 20
+        print("num of most recent listings:", most_recent_listings)
 
         max = 30
         # Click on each <a> tag with a delay of one second
-        for idx, link in enumerate(job_card_links):
+        for idx, link in enumerate(job_card_links[-most_recent_listings:]):
             # Placeholder variable definitions
             revenue = "N/A"
             industry = "N/A"
             size = "N/A"
             company_website = "N/A"
 
-            if idx > max:
-                break
+            # if idx > max:
+            #     break
             print(
                 "================================================================================================================================================================================================================================================"
             )
@@ -68,16 +78,22 @@ def scrape_listings(keywords, driver):
 
             # Find the div with attribute 'data-test' and value 'jobTitle'
             try:
-                div_job_title = soup.find("div", {"data-test": "jobTitle"})
-                job_title = div_job_title.text
+                # div_job_title = soup.find("div", {"data-test": "jobTitle"})
+                id_job_title = driver.find_elements(
+                    By.CSS_SELECTOR, "[id^='jd-job-title']"
+                )
 
-                div_company_name = soup.find("div", {"data-test": "employerName"})
-                company_name = div_company_name.text
+                job_title = id_job_title[0].text
 
-                div_job_age = soup.find("div", {"data-test": "job-age"})
-                job_age = div_job_age.text
+                # div_company_name = soup.find("div", {"data-test": "employerName"})
+                # company_name = div_company_name.text
 
-                url = link.get_attribute("href")
+                # div_job_age = soup.find("div", {"data-test": "job-age"})
+                # job_age = div_job_age.text
+
+                link_a_element = link.find_element(By.CSS_SELECTOR, "a[href]")
+
+                url = link_a_element.get_attribute("href")
 
                 # Find the <span> element with the text "Size"
                 span_with_size = soup.find("span", text="Size")
@@ -95,24 +111,39 @@ def scrape_listings(keywords, driver):
                 if span_with_revenue:
                     revenue = span_with_revenue.find_next_sibling().text
 
-                descriptions = soup.find(attrs={"class": "desc"})
+                # descriptions = soup.find(attrs={"class": "desc"})
+                descriptions = soup.find(
+                    "div",
+                    class_=lambda x: x and x.startswith("JobDetails_blurDescription"),
+                )
+
+                print("description length:", len(descriptions))
+
                 keyword_snippets = {}
 
                 if len(descriptions) > 2:
                     print("method 1")
 
                     for keyword in keywords:
+                        print("KEYWORD:", keyword)
                         array_of_strings = [
                             description.get_text(separator=" ", strip=True)
                             for description in descriptions
                         ]
 
-                        keyword_snippets[keyword] = filter_strings_with_keyword(
-                            array_of_strings, keyword
-                        )
+                        if isinstance(keyword, list):
+                            joined_keyword = " + ".join(keyword)
+                            keyword_snippets[
+                                joined_keyword
+                            ] = filter_strings_with_keyword(array_of_strings, keyword)
+                        else:
+                            keyword_snippets[keyword] = filter_strings_with_keyword(
+                                array_of_strings, keyword
+                            )
 
                 else:
                     for keyword in keywords:
+                        print("KEYWORD:", keyword)
                         print("method 2")
                         concatenated_strings = " ".join(
                             [
@@ -121,18 +152,35 @@ def scrape_listings(keywords, driver):
                             ]
                         )
 
-                        keyword_snippets[keyword] = find_sentences_with_keyword(
-                            concatenated_strings, keyword
-                        )
+                        if isinstance(keyword, list):
+                            joined_keyword = " + ".join(keyword)
+                            keyword_snippets[
+                                joined_keyword
+                            ] = find_sentences_with_keyword(
+                                concatenated_strings, keyword
+                            )
+                        else:
+                            keyword_snippets[keyword] = find_sentences_with_keyword(
+                                concatenated_strings, keyword
+                            )
+
+                print("keyword_snippets:", keyword_snippets)
 
                 for keyword in keywords:
-                    keyword_snippets[keyword] = format_into_bullets(
-                        keyword_snippets[keyword]
-                    )
+                    if isinstance(keyword, list):
+                        joined_keyword = " + ".join(keyword)
 
-                print("Data posted:", job_age)
-                print("\n")
-                print("Company name:", company_name)
+                        keyword_snippets[joined_keyword] = format_into_bullets(
+                            keyword_snippets[joined_keyword], keyword
+                        )
+                    else:
+                        keyword_snippets[keyword] = format_into_bullets(
+                            keyword_snippets[keyword], keyword
+                        )
+
+                # print("Data posted:", job_age)
+                # print("\n")
+                # print("Company name:", company_name)
                 print("\n")
                 print("job title:", job_title)
                 print("\n")
@@ -144,17 +192,31 @@ def scrape_listings(keywords, driver):
                 print("indsutry:", industry)
                 print("revenue:", revenue)
 
+                # write_to_excel(
+                #     file_name="scrape_data.xlsx",
+                #     # sheet_name=" + ".join(keywords),
+                #     sheet_name=keywords[0],
+                #     company=company_name,
+                #     title=job_title,
+                #     url=url,
+                #     size=size,
+                #     industry=industry,
+                #     revenue=revenue,
+                #     age=job_age,
+                #     keyword_snippets=keyword_snippets,
+                #     company_website=company_website,
+                # )
                 write_to_excel(
                     file_name="scrape_data.xlsx",
                     # sheet_name=" + ".join(keywords),
                     sheet_name=keywords[0],
-                    company=company_name,
+                    company="N/A",
                     title=job_title,
                     url=url,
                     size=size,
                     industry=industry,
                     revenue=revenue,
-                    age=job_age,
+                    age="N/A",
                     keyword_snippets=keyword_snippets,
                     company_website=company_website,
                 )
