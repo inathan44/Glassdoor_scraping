@@ -3,6 +3,7 @@ from helper_functions import (
     find_sentences_with_keyword,
     format_into_bullets,
     extract_context_sentence,
+    find_company_title,
 )
 
 
@@ -32,7 +33,6 @@ def scrape_listings(keywords, driver):
         print("length of cards on page", len(job_card_links))
 
         if len(job_card_links) % 20 == 0:
-            print("divisible by 20")
             most_recent_listings = 20
         else:
             most_recent_listings = len(job_card_links) % 20
@@ -53,15 +53,36 @@ def scrape_listings(keywords, driver):
                 "================================================================================================================================================================================================================================================"
             )
             # Check if the modal is present and close it
-            try:
-                modal = driver.find_element(By.CLASS_NAME, "actionBarMt0")
-                if modal.is_displayed():
-                    modal_close_button = modal.find_element(By.TAG_NAME, "button")
-                    modal_close_button.click()
+            # try:
+            #     modal = driver.find_element(By.CLASS_NAME, "actionBarMt0")
+            #     if modal.is_displayed():
+            #         modal_close_button = modal.find_element(By.TAG_NAME, "button")
+            #         modal_close_button.click()
 
-                    time.sleep(2)  # Give some time for the modal to close
+            #         time.sleep(2)  # Give some time for the modal to close
+            # except Exception as e:
+            #     print(repr(e))
+
+            # Find the modal element with a class that starts with "Modal"
+            try:
+                modal = driver.find_element(By.CSS_SELECTOR, '[class^="Modal"]')
+
+                # Check if the modal is displayed
+                if modal.is_displayed():
+                    # Find the button with the classname 'CloseButton' inside the modal
+                    try:
+                        modal_close_button = modal.find_element(
+                            By.CLASS_NAME, "CloseButton"
+                        )
+                        modal_close_button.click()
+
+                        time.sleep(2)  # Give some time for the modal to close
+                    except Exception as e:
+                        print("CloseButton not found in the modal!")
+                else:
+                    print("Modal is not displayed.")
             except Exception as e:
-                pass
+                print("Modal not found!")
 
             retry_count = 0
             while retry_count < max_retries:
@@ -78,18 +99,15 @@ def scrape_listings(keywords, driver):
 
             # Find the div with attribute 'data-test' and value 'jobTitle'
             try:
-                # div_job_title = soup.find("div", {"data-test": "jobTitle"})
                 id_job_title = driver.find_elements(
                     By.CSS_SELECTOR, "[id^='jd-job-title']"
                 )
 
                 job_title = id_job_title[0].text
 
-                # div_company_name = soup.find("div", {"data-test": "employerName"})
-                # company_name = div_company_name.text
+                company_name = find_company_title(html=html_source)
 
-                # div_job_age = soup.find("div", {"data-test": "job-age"})
-                # job_age = div_job_age.text
+                print("company:", company_name)
 
                 link_a_element = link.find_element(By.CSS_SELECTOR, "a[href]")
 
@@ -117,8 +135,6 @@ def scrape_listings(keywords, driver):
                     class_=lambda x: x and x.startswith("JobDetails_blurDescription"),
                 )
 
-                print("description length:", len(descriptions))
-
                 keyword_snippets = {}
 
                 if len(descriptions) > 2:
@@ -143,7 +159,6 @@ def scrape_listings(keywords, driver):
 
                 else:
                     for keyword in keywords:
-                        print("KEYWORD:", keyword)
                         print("method 2")
                         concatenated_strings = " ".join(
                             [
@@ -164,8 +179,6 @@ def scrape_listings(keywords, driver):
                                 concatenated_strings, keyword
                             )
 
-                print("keyword_snippets:", keyword_snippets)
-
                 for keyword in keywords:
                     if isinstance(keyword, list):
                         joined_keyword = " + ".join(keyword)
@@ -180,12 +193,12 @@ def scrape_listings(keywords, driver):
 
                 # print("Data posted:", job_age)
                 # print("\n")
-                # print("Company name:", company_name)
+                print("Company name:", company_name)
                 print("\n")
                 print("job title:", job_title)
                 print("\n")
-                print("keyword snippets", keyword_snippets)
-                print("\n")
+                # print("keyword snippets", keyword_snippets)
+                # print("\n")
                 print("url:", url)
                 print("\n")
                 print("size:", size)
@@ -210,7 +223,7 @@ def scrape_listings(keywords, driver):
                     file_name="scrape_data.xlsx",
                     # sheet_name=" + ".join(keywords),
                     sheet_name=keywords[0],
-                    company="N/A",
+                    company=company_name,
                     title=job_title,
                     url=url,
                     size=size,
