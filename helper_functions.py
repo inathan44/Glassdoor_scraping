@@ -154,7 +154,7 @@ def find_company_title(html):
                 second_div_inside_logo = div_elements_inside_logo[1]
                 return second_div_inside_logo.text.strip()
             else:
-                return 'No second div element found inside the "a" tag.'
+                return "N/A"
         else:
             # If there is no "a" tag (logo), find the first div directly within the parent div
             first_div = parent_div.find("div")
