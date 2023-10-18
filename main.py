@@ -3,7 +3,12 @@ from helper_functions import (
     get_random_header,
 )
 
-from paginate import next_page_found, go_to_next_page
+from paginate import (
+    next_page_found,
+    go_to_next_page,
+    click_show_more,
+    show_more_button_found,
+)
 from search_for_jobs import search_jobs_by_keywords
 
 import logging
@@ -19,7 +24,16 @@ from bs4 import BeautifulSoup
 
 from scrape_page_of_listings import scrape_listings
 
-KEYWORDS = ["netsuite"]
+# keywords that will be placed into the search bar
+search_term_keywords = ["iterable"]
+
+# Individual secondary keywords, placed in its own column (ex: salesforce)
+single_secondary_keywords = ["direct mail", "lifecycle", "b2c"]
+
+# many secondary keywords that will grouped in the same column (ex: Amazon web services AND/OR AWS)
+joint_secondary_keywords = []
+
+keywords = search_term_keywords + single_secondary_keywords + joint_secondary_keywords
 
 
 URL = "https://www.glassdoor.com/Job/"
@@ -49,10 +63,10 @@ chrome_options.add_argument("--no-sandbox")
 chrome_options.add_argument("--disable-blink-features=AutomationControlled")
 
 
-proxy = "https://us.smartproxy.com:10000"
+# proxy = "https://us.smartproxy.com:10000"
 
 # Add the proxy configuration to the WebDriver options
-chrome_options.add_argument(f"--proxy-server={proxy}")
+# chrome_options.add_argument(f"--proxy-server={proxy}")
 
 
 # Set path to your Chrome driver executable
@@ -64,16 +78,18 @@ driver = webdriver.Chrome(options=chrome_options, service=service)
 
 try:
     # Run search
-    search_jobs_by_keywords(url=URL, keywords=KEYWORDS, driver=driver)
+    search_jobs_by_keywords(url=URL, keywords=search_term_keywords, driver=driver)
 
     page = 1
+
     while True:  # While there is a next page, run the script
         # Scrape listings on current page
-        scrape_listings(keywords=KEYWORDS, driver=driver)
+        scrape_listings(keywords=keywords, driver=driver)
 
-        if next_page_found(driver=driver):
-            print("the next page is found")
-            go_to_next_page(driver=driver)
+        if show_more_button_found(driver=driver):
+            print("show more is found")
+            click_show_more(driver=driver)
+            # go_to_next_page(driver=driver)
         else:
             break
 
