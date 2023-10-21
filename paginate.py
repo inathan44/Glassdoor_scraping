@@ -44,7 +44,7 @@ def next_page_found(driver):
             modal_close_button.click()
 
     except Exception as e:
-        print("modal not found")
+        print("modal not found here")
 
     try:
         next_button = driver.find_elements(
